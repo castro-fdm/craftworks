@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/login.css">
+    <title>Login</title>
+</head>
+<body>
+    <section name="nav">
+        <div class="logoContainer">
+            <a name="logo_link" href="index.html"><img name="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+            <div class="search">
+                <input name="searchField" type="text" placeholder="Search...">
+                <button>Search</button>
+            </div>
+        </nav>
+    </section>
+    <section name="login">
+        <div class="loginContainer">
+            <form name="login_form" action="login.php" method="POST">
+                <label>Username:</label><input name="usernameField" type="text" name="username" required>
+                <label>Password:</label><input name="passwordField" type="password" name="password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="signup.html">Sign Up</a></p> 
+        </div>  
+    </section> 
+</body>
+</html>

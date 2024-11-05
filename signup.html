@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/signup.css">
+    <title>Signup</title>
+</head>
+<body>
+    <section name="nav">
+        <div class="logoContainer">
+            <a name="logo_link" href="index.html"><img name="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+            <div class="search">
+                <input name="searchField" type="text" placeholder="Search...">
+                <button>Search</button>
+            </div>
+        </nav>
+    </section>
+    <section name="signup">
+        <div class="signupContainer">
+            <form name="signup_form" action="register.php" method="POST">
+                <label>Username:</label><input name="usernameField" type="text" required>
+                <label>Password:</label><input name="passwordField" type="password" required>
+                <button type="submit">Sign Up</button>
+            </form>  
+        </div>
+    </section>  
+</body>
+</html>
