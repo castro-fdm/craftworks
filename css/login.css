@@ -1,26 +1,38 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
 }
-
-section[name="nav"] {
+#navBar {
     display: flex;
     flex-direction: row;
-    background-color: #333;
+    background-color: #fff;
     padding: 10px;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
-a[name="logo_link"] {
+
+#image-scroll {
+    width: 100%;
+    height: 80px;
+}
+
+#logo-link {
     text-decoration: none;
     color: #fff;   
 }
 
-img[name="logo"] {
+#logo {
     width: 100%;
     height: 100%;
-    margin-right: 10px;
+    margin: auto;
 }
 
 .logoContainer {
@@ -29,6 +41,7 @@ img[name="logo"] {
     width: 200px;
     height: 50px;
 }
+
 nav {
     display: flex;
     flex-direction: row;
@@ -45,23 +58,23 @@ nav ul li {
 }
 nav ul li a {
     text-decoration: none;
-    color: #fff;
+    color: #000000;
     position: relative;
+    font-weight: bold;
 }
 .search {
     display: flex;
     align-items: center;
-    margin-left: 20px;
 }
-input[name="searchField"] {
+.search input {
     width: 200px;
     height: 15px;
     padding: 10px;
-    border: none;
+    border: solid;
     border-radius: 10px;
-    background-color: #444;
+    background-color: #fff;
     margin: 10px;
-    color: #fff;
+    color: #000;
 }
 .search button {
     background-color: #444;
@@ -76,7 +89,7 @@ form[name="login_form"] {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 25px;
 }
 label {
     font-size: 18px;

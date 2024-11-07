@@ -7,9 +7,9 @@
     <title>Login</title>
 </head>
 <body>
-    <section name="nav">
+    <section id="navBar">
         <div class="logoContainer">
-            <a name="logo_link" href="index.html"><img name="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
+            <a id="logo-link" href="index.html"><img id="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
         </div>
         <nav>
             <ul>
@@ -19,13 +19,14 @@
                 <li><a href="login.html">Login</a></li>
             </ul>
             <div class="search">
-                <input name="searchField" type="text" placeholder="Search...">
+                <input type="text" placeholder="Search...">
                 <button>Search</button>
             </div>
         </nav>
     </section>
     <section name="login">
         <div class="loginContainer">
+            <h1>Login</h1>
             <form name="login_form" action="login.php" method="POST">
                 <label>Username:</label><input name="usernameField" type="text" name="username" required>
                 <label>Password:</label><input name="passwordField" type="password" name="password" required>
