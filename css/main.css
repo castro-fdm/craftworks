@@ -3,12 +3,13 @@ html {
 }
 
 body {
-    height: 300vh;
+    width: 100%;
+    height: auto;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
 }
-#navBar {
+#navbarSection {
     display: flex;
     flex-direction: row;
     background-color: #fff;
@@ -18,11 +19,6 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-}
-
-#image-scroll {
-    width: 100%;
-    height: 80px;
 }
 
 #logo-link {
@@ -63,32 +59,10 @@ nav ul li a {
     position: relative;
     font-weight: bold;
 }
-.search {
-    display: flex;
-    align-items: center;
-}
-.search input {
-    width: 200px;
-    height: 15px;
-    padding: 10px;
-    border: solid;
-    border-radius: 10px;
-    background-color: #fff;
-    margin: 10px;
-    color: #000;
-}
-.search button {
-    background-color: #444;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-}
 
-#image-scroll {
+#backdropSection {
     width: 100%;
-    height: 80vh;
+    height: 90vh;
 }
 
 #backdrop {
@@ -96,6 +70,7 @@ nav ul li a {
     height: 100%;
     object-fit: cover;
     filter: blur(3px);
+    filter: brightness(65%);
 }
 
 .image-container {
@@ -111,7 +86,218 @@ nav ul li a {
 .textSlogan {
     position: absolute;
     left: 80px;
+    bottom: 210px;
     color: #fff;
     font-size: 45px;
     font-weight: bold;
-  }
+}
+
+#featuredProducts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: auto;
+    padding: 20px;
+}
+
+.productCard {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: 400px;
+    gap: 100px;
+}
+
+.productCard a {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: inherit;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #000;
+}
+
+.product {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: inherit;
+    margin: 10px;
+    box-shadow: 0 8px 32px 0 rgba(141, 142, 146, 0.8    );
+    border-radius: 5px;
+}
+
+.product img {
+    width: 100%;
+    height: 100%;
+    margin-top: 10px;
+    object-fit: cover;
+    background-color: rgb(205, 212, 212);
+}
+
+.product h3 {
+    margin: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: start;
+}
+
+.product p {
+    margin: 10px;
+    font-size: 15px;
+}
+
+.featuredTitleContainer {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    align-items: center;
+    justify-content: left;
+}
+
+.featuredTitle {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+.featuredTitle label {
+    font-size: 15px;
+}
+
+#customerSection {
+    width: 100%;
+    height: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.customerContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.customerTitle {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.customerTitle label {
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.customerTitle p {
+    font-size: 15px;
+}
+
+.customerCards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px; /* Adjust the gap between customer cards */
+    flex-wrap: wrap; /* Allows the cards to wrap on smaller screens */
+}
+
+.customerCard {
+    display: flex;
+    flex-direction: column;
+    width: 300px; /* Set fixed width for consistency */
+    height: auto;
+    box-shadow: 0 8px 32px 0 rgba(141, 142, 146, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff; /* Add background color */
+    margin: 10px;
+    text-align: center;
+}
+
+.customerCard img {
+    width: 100%;
+    height: 200px; /* Adjust image height for a uniform look */
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.customerCard h3 {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.customerCard p {
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+#footerSection {
+    padding: 10px;
+    width: auto;
+    height: auto;
+    background-color: #010101;
+    border-top-style: solid;
+}
+
+.footerContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    gap: 100px;
+}
+
+.footerLogoContainer {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    gap: 20px;
+}
+
+.footerLogoContainer label, p {
+    font-size: 15px;
+    padding-left: 35px;
+    color: #fff;
+}
+
+.newsletterContainer {
+    min-width: 450px;
+    height: fit-content;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.newsletterContainer label {
+    font-size: 25px;
+    color: #413c3c;
+}
+
+.newsletterContainer input {
+    width: 100%;
+    border: 1px solid #000;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #000;
+}
+
+.newsletterContainer button {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+}

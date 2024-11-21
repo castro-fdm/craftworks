@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <section id="navBar">
+    <section id="navbarSection">
         <div class="logoContainer">
             <a id="logo-link" href="index.html"><img id="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
         </div>
@@ -15,20 +15,98 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="#image-scroll">About Us</a></li>
+                <li><a href="#imageScroll">About Us</a></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
-            <div class="search">
-                <input type="text" placeholder="Search...">
-                <button>Search</button>
-            </div>
         </nav>
     </section>
-    <section id="image-scroll">
+    <section id="backdropSection">
         <div class="image-container">
             <img src="/res/backdrop1hd.png" alt="" id="backdrop">
-            <div class="textSlogan">Empower Through Art</div>
+            <div class="textSlogan">Empower Through Art<br><label style="font-size: 20px;">Discover unique handmade arts and crafts created by persons deprived of liberty.</label><br><button style="background-color: black; color: white; font-size: 15px; border-radius: 5px; padding: 10px; cursor: pointer;">Shop Now</button></div>
         </div>
     </section>
+    <section id="featuredProducts">
+        <div class="featuredProductsContainer" style="display: inline-block; width: auto; height: auto;">
+            <div class="featuredTitleContainer">
+                <div class="featuredTitle">
+                    <label style="font-weight: bold; font-size: 40px">Featured Products</label><br><label style="font-size: 15px;">Browse handcrafted products</label><br><a href="shop.html"><button>View All Products</button></a>
+                </div>
+            </div>
+            <div class="productCard">
+                <div class="product">
+                    <a href="shop.html">
+                        <img src="/res/product1.png" alt="Product 1">
+                        <h3>Product 1</h3>
+                        <p>	&#8369; 1000</p>
+                    </a>
+                </div>
+                <div class="product">
+                    <a href="shop.html">
+                        <img src="/res/product1.png" alt="Product 2">
+                        <h3>Product 2</h3>
+                        <p>	&#8369; 1000</p>
+                    </a>
+                </div>
+                <div class="product">
+                    <a href="shop.html">
+                        <img src="/res/product1.png" alt="Product 3">
+                        <h3>Product 3</h3>
+                        <p>	&#8369; 1000</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="customerSection">
+        <div class="customerContainer">
+            <div class="customerTitle">
+                <label style="font-weight: bold; font-size: 40px">Customer Reviews</label><br><label style="font-size: 15px;">What our customers say</label>
+            </div>
+            <div class="customerCards">
+                <div class="customerCard">
+                    <div class="customer">
+                        <img src="/res/customer1.png" alt="Customer 1">
+                        <h3>Customer 1</h3>
+                        <p>	&#8369; 1000</p>
+                    </div>
+                </div>
+                <div class="customerCard">
+                    <div class="customer">
+                        <img src="/res/customer1.png" alt="Customer 2">
+                        <h3>Customer 2</h3>
+                        <p>	&#8369; 1000</p>
+                    </div>
+                </div>
+                <div class="customerCard">
+                    <div class="customer">
+                        <img src="/res/customer1.png" alt="Customer 3">
+                        <h3>Customer 3</h3>
+                        <p>	&#8369; 1000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="footerSection">
+        <div class="footerContainer">
+            <div class="footerLogoContainer">
+                <div class="imgContainer" style="background-color: #fff;">
+                    <img src="/res/craftworks_logo.png" alt="Logo" style="width: 280px;">
+                </div>
+                <div class="contactContainer">
+                    <label style="font-size: 25px; font-weight: bold;">Contact Us</label><br>
+                    <p>Address: 123 Main St, City, Country</p>
+                    <p>Phone: +1 (123) 456-7890</p>
+                    <p>Email: 0cUg8@example.com</p>
+                </div>
+            </div>
+            <div class="newsletterContainer">
+                <label>Subscribe to our newsletter</label><br>
+                <input id="newsletterEmail" type="email" placeholder="Email Address"><br>
+                <button>Subscribe</button>
+            </div>
+        </div>
+    </section>  
 </body>
 </html>

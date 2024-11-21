@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - CraftWorks</title>
+    <link rel="stylesheet" href="/css/shop.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <section id="navbarSection">
+        <div class="logoContainer">
+            <a id="logo-link" href="index.html"><img id="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="#imageScroll">About Us</a></li>
+                <li><a href="login.html">User</a></li>
+            </ul>
+        </nav>
+    </section>
+
+    <section id="shopSection">
+        <div id="filterSection">
+            <h2>Filters</h2>
+            <div class="filter">
+                <label for="category">Category:</label>
+                <select id="category">
+                    <option value="all">All</option>
+                    <option value="art">Option 1</option>
+                    <option value="crafts">Option 2</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label for="priceRange">Price Range:</label>
+                <input type="range" id="priceRange" min="0" max="5000" value="2500">
+            </div>
+            <div class="filter">
+                <label for="sort">Sort By:</label>
+                <select id="sort">
+                    <option value="low-to-high">Price: Low to High</option>
+                    <option value="high-to-low">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="productsSection">
+            <div class="header-section">
+                <h1>Shop Products</h1>
+                <input type="text" id="searchBar" placeholder="Search Products..." class="search-field">
+            </div>
+            <div class="productCard" id="productCards">
+                <!-- Product cards will be dynamically injected here -->
+            </div>
+        </div>
+    </section>
+</body>
+</html>
