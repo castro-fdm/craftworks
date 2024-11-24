@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/signup.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Signup</title>
 </head>
 <body>
@@ -17,18 +18,73 @@
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="about.html">About Us</a></li>
                 <li><a href="login.html">Login</a></li>
-            </ul>
+            </ul> 
         </nav>
     </section>
     <section name="signup">
         <div class="signupContainer">
             <h1>Sign Up</h1>
-            <form name="signup_form" action="register.php" method="POST">
-                <label>Username:</label><input name="usernameField" type="text" required>
-                <label>Password:</label><input name="passwordField" type="password" required>
+
+            <form id="signupForm">
+                <label>Username:</label>
+                <input id="username" name="usernameField" type="text" required>
+                <span id="usernameError" class="error-message"></span><br>
+
+                <label>Email:</label>
+                <input id="email" name="emailField" type="email" required>
+                <span id="emailError" class="error-message"></span>
+
+                <label>Phone Number:</label>
+                <input id="phone" name="phoneField" type="tel" required>
+                <span id="phoneError" class="error-message"></span>
+
+                <label>Password:</label>
+                <input id="password" name="passwordField" type="password" required>
+                
                 <button type="submit">Sign Up</button>
             </form>  
         </div>
-    </section>  
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            $('#signupForm').on('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Clear previous error messages
+                $('#usernameError').text('');
+                $('#emailError').text('');
+                $('#phoneError').text('');
+
+                // Send AJAX request
+                $.ajax({
+                    url: 'validate.php', // Backend script to handle validation
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            // Redirect to index.html on successful signup
+                            window.location.href = 'index.html';
+                        } else {
+                            // Display error messages
+                            if (response.errors.username) {
+                                $('#usernameError').text(response.errors.username);
+                            }
+                            if (response.errors.email) {
+                                $('#emailError').text(response.errors.email);
+                            }
+                            if (response.errors.phone) {
+                                $('#phoneError').text(response.errors.phone);
+                            }
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

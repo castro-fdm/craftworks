@@ -24,12 +24,42 @@
         <div class="loginContainer">
             <h1>Login</h1>
             <form name="login_form" action="login.php" method="POST">
-                <label>Username:</label><input name="usernameField" type="text" name="username" required>
-                <label>Password:</label><input name="passwordField" type="password" name="password" required>
+                <label for="usernameField">Username:</label>
+                <input name="usernameField" type="text" required>
+                <span class="error-message" id="usernameError"></span>
+
+                <label for="emailField">Email:</label>
+                <input name="emailField" type="email" required>
+                <span class="error-message" id="emailError"></span>
+
+                <label for="passwordField">Password:</label>
+                <input name="passwordField" type="password" required>
+                <span class="error-message" id="passwordError"></span>
+
                 <button type="submit">Login</button>
             </form>
             <p>Don't have an account? <a href="signup.html">Sign Up</a></p> 
         </div>  
-    </section> 
+    </section>
+    <script>
+        // Check for query string parameters with errors
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const usernameError = urlParams.get('usernameError');
+            const emailError = urlParams.get('emailError');
+            const passwordError = urlParams.get('passwordError');
+    
+            // Display error messages under the input fields
+            if (usernameError) {
+                document.getElementById('usernameError').textContent = usernameError;
+            }
+            if (emailError) {
+                document.getElementById('emailError').textContent = emailError;
+            }
+            if (passwordError) {
+                document.getElementById('passwordError').textContent = passwordError;
+            }
+        };
+    </script>    
 </body>
 </html>

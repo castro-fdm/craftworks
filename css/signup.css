@@ -7,6 +7,12 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
 }
+
+.error-message {
+    color: red;
+    font-size: 12px;
+}
+
 #navBar {
     display: flex;
     flex-direction: row;
@@ -92,16 +98,16 @@ form[name="signup_form"] {
     margin-top: 25px;
 }
 label {
+    display: block;
     font-size: 18px;
-    margin-bottom: 10px;
 }
-input[name="usernameField"], input[name="passwordField"] {
-    width: 300px;
-    height: 30px;
+input[name="usernameField"], input[name="passwordField"], input[name="emailField"], input[name="phoneField"] {
+    width: 300px    ;
+    height: 20px;
     padding: 10px;
-    border: solid;
+    border: 1px solid;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 button[type="submit"] {
     background-color: #333;
@@ -116,17 +122,29 @@ button[type="submit"] {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
-    border: solid;
+    margin: 50px;
+    border: 1px solid;
     border-radius: 5px;
-    padding: 20px;
+    padding: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 400px;
+    width: 300px;
 }
 
 section[name="signup"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    height: auto;
+}
+
+input {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid #007BFF;
 }

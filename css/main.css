@@ -8,11 +8,12 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
 }
 #navbarSection {
     display: flex;
     flex-direction: row;
-    background-color: #fff;
+    background-color: #f2f2f2;
     padding: 10px;
     justify-content: space-between;
     align-items: center;
@@ -23,7 +24,7 @@ body {
 
 #logo-link {
     text-decoration: none;
-    color: #fff;   
+    color: #f2f2f2;   
 }
 
 #logo {
@@ -87,9 +88,24 @@ nav ul li a {
     position: absolute;
     left: 80px;
     bottom: 210px;
-    color: #fff;
+    color: #f2f2f2;
     font-size: 45px;
     font-weight: bold;
+}
+
+#shopButton {
+    padding: 12px 25px;
+    background-color: #FC4C69;  /* Green accent */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+#shopButton:hover {
+    background-color: #f93959;
 }
 
 #featuredProducts {
@@ -102,54 +118,59 @@ nav ul li a {
     padding: 20px;
 }
 
-.productCard {
+.productCardContainer {
     display: flex;
-    flex-direction: row;
+    gap: 20px;
     justify-content: center;
-    align-items: center;
-    width: auto;
-    height: 400px;
-    gap: 100px;
+    flex-wrap: wrap;
 }
 
-.productCard a {
-    display: flex;
-    flex-direction: column;
+.productCard {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
     width: 300px;
-    height: inherit;
-    border-radius: 5px;
-    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.productCard img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.productCard h3 {
+    margin: 15px 0;
+    font-size: 1.5rem;
     color: #000;
 }
 
-.product {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    height: inherit;
-    margin: 10px;
-    box-shadow: 0 8px 32px 0 rgba(141, 142, 146, 0.8    );
+.productCard p {
+    padding: 0 15px;
+    font-size: 1rem;
+    color: #777;
+}
+
+.productCard button {
+    padding: 12px 25px;
+    background-color: #FC4C69;  /* Green accent */
+    color: #fff;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
 }
 
-.product img {
-    width: 100%;
-    height: 100%;
-    margin-top: 10px;
-    object-fit: cover;
-    background-color: rgb(205, 212, 212);
+.productCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.product h3 {
-    margin: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: start;
-}
-
-.product p {
-    margin: 10px;
-    font-size: 15px;
+.productCard button:hover {
+    background-color: #f93959;
 }
 
 .featuredTitleContainer {
@@ -160,6 +181,21 @@ nav ul li a {
     justify-content: left;
 }
 
+.featuredTitleContainer button {
+    padding: 12px 25px;
+    background-color: #FC4C69;  /* Green accent */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.featuredTitleContainer button:hover {
+    background-color: #f93959;
+}
+
 .featuredTitle {
     width: 100%;
     text-align: center;
@@ -168,12 +204,13 @@ nav ul li a {
 
 .featuredTitle label {
     font-size: 15px;
+    margin: 10px;
 }
 
 #customerSection {
     width: 100%;
     height: auto;
-    margin-top: 50px;
+    margin-top: 30px;
     margin-bottom: 50px;
     display: flex;
     flex-direction: column;
@@ -201,43 +238,32 @@ nav ul li a {
     font-size: 15px;
 }
 
-.customerCards {
+.feedback-card-container {
     display: flex;
+    gap: 20px;
     justify-content: center;
-    align-items: center;
-    gap: 30px; /* Adjust the gap between customer cards */
-    flex-wrap: wrap; /* Allows the cards to wrap on smaller screens */
+    flex-wrap: wrap;
 }
 
-.customerCard {
-    display: flex;
-    flex-direction: column;
-    width: 300px; /* Set fixed width for consistency */
-    height: auto;
-    box-shadow: 0 8px 32px 0 rgba(141, 142, 146, 0.8);
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #fff; /* Add background color */
-    margin: 10px;
+.feedback-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     text-align: center;
+    width: 300px;
+    transition: transform 0.3s ease;
 }
 
-.customerCard img {
-    width: 100%;
-    height: 200px; /* Adjust image height for a uniform look */
-    object-fit: cover;
-    border-radius: 5px;
+.feedback-card p {
+    font-size: 1rem;
+    color: #555;
 }
 
-.customerCard h3 {
+.feedback-card span {
+    display: block;
     margin-top: 10px;
-    font-size: 20px;
     font-weight: bold;
-}
-
-.customerCard p {
-    margin-top: 10px;
-    font-size: 15px;
 }
 
 #footerSection {
@@ -266,7 +292,6 @@ nav ul li a {
 
 .footerLogoContainer label, p {
     font-size: 15px;
-    padding-left: 35px;
     color: #fff;
 }
 
