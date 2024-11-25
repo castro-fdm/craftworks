@@ -159,10 +159,6 @@ td a.edit {
   background-color: #4CAF50;
 }
 
-td a.delete {
-  background-color: #f44336;
-}
-
 td a:hover {
   opacity: 0.8;
 }

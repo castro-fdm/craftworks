@@ -51,10 +51,69 @@
                 <h1>Shop Products</h1>
                 <input type="text" id="searchBar" placeholder="Search Products..." class="search-field">
             </div>
-            <div class="productCard" id="productCards">
+            <div class="productCards" id="productCards">
                 <!-- Product cards will be dynamically injected here -->
             </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+
+            // Attach filter/sort/search functionality
+            document.getElementById('category').addEventListener('change', loadProducts);
+            document.getElementById('priceRange').addEventListener('input', loadProducts);
+            document.getElementById('sort').addEventListener('change', loadProducts);
+            document.getElementById('searchBar').addEventListener('input', loadProducts);
+        });
+
+        function loadProducts() {
+            const category = document.getElementById('category').value;
+            const priceRange = document.getElementById('priceRange').value;
+            const sort = document.getElementById('sort').value;
+            const searchQuery = document.getElementById('searchBar').value.toLowerCase();
+
+            // Fetch products dynamically
+            fetch('get-products.php')
+                .then(response => response.json())
+                .then(products => {
+                    const filteredProducts = products.filter(product => {
+                        const matchesCategory = category === 'all' || product.category === category;
+                        const matchesPrice = product.price <= priceRange;
+                        const matchesSearch = product.product_name.toLowerCase().includes(searchQuery);
+
+                        return matchesCategory && matchesPrice && matchesSearch;
+                    });
+
+                    // Sort products
+                    if (sort === 'low-to-high') {
+                        filteredProducts.sort((a, b) => a.price - b.price);
+                    } else if (sort === 'high-to-low') {
+                        filteredProducts.sort((a, b) => b.price - a.price);
+                    }
+
+                    displayProducts(filteredProducts);
+                });
+        }
+
+        function displayProducts(products) {
+        const productCardsContainer = document.getElementById('productCards');
+        productCardsContainer.innerHTML = ''; // Clear existing products
+
+        products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product'; // Use the CSS class "product"
+            productDiv.innerHTML = `
+                <img src="${product.image_url}" alt="${product.product_name}">
+                <h3>${product.product_name}</h3>
+                <p>${product.description}</p>
+                <p class="price">$${product.price.toFixed(2)}</p>
+                <button>Add to Cart</button>
+            `;
+            productCardsContainer.appendChild(productDiv);
+        });
+    }
+    </script>
 </body>
 </html>

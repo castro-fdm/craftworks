@@ -7,8 +7,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: admin-login.php");
     exit("Access denied");
 }
-
-// Admin content goes here
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +22,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <body>
     <section id="navbar">
         <ul>
-            <li><a href="admin.html">Admin</a></li>
+            <li><a href="admin-dashboard.php">Admin</a></li>
             <li><a href="index.html" style="margin-right: 40px;">Logout</a></li>
         </ul>
     </section>
@@ -72,11 +70,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
             // Check which category was clicked
             if (category === "Users") {
-                // Load user data (this is where your dynamic data comes in)
                 loadUsers(contentDiv);
             } else if (category === "Items") {
-                // You can create similar functions for other categories
-                contentDiv.innerHTML = "<p>Items data will be displayed here.</p>";
+                loadItems(contentDiv);
             } else if (category === "Payments") {
                 contentDiv.innerHTML = "<p>Payments data will be displayed here.</p>";
             } else if (category === "Product Analysis") {
@@ -89,15 +85,46 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
         // Function to load user data dynamically
         function loadUsers(contentDiv) {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'get-users.php', true); // This will fetch user data from the server
+            xhr.open('GET', 'get-users.php', true); // Fetch user data from the server
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    contentDiv.innerHTML = xhr.responseText; // Inject the fetched user data into the content section
+                    contentDiv.innerHTML = xhr.responseText;
                 } else {
                     contentDiv.innerHTML = "<p>Failed to load user data.</p>";
                 }
             };
             xhr.send();
+        }
+
+        // Function to load item data and add items form
+        function loadItems(contentDiv) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get-items.php', true); // Fetch item data
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    contentDiv.innerHTML = xhr.responseText;
+                } else {
+                    contentDiv.innerHTML = "<p>Failed to load item data.</p>";
+                }
+            };
+            xhr.send();
+        }
+        // Global function to delete an item
+        function deleteItem(id) {
+            if (confirm("Are you sure you want to delete this item?")) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'delete-item.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        alert(xhr.responseText);
+                        displayCategory('Items'); // Reload Items category after deletion
+                    } else {
+                        alert("Failed to delete item.");
+                    }
+                };
+                xhr.send('id=' + id);
+            }
         }
     </script>
 </body>

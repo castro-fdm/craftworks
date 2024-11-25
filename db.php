@@ -3,9 +3,9 @@
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
 
-    $servername = "localhost";
-    $username = "root";
-    $password = "Hotwheels06"; // change this to your password
+    $servername = "database-1.czcee4o6obzg.ap-southeast-1.rds.amazonaws.com";
+    $username = "admin";
+    $password = "Hotwheels_06"; // change this to your password
     $dbname = "ecommerce_db";
 
     // Create connection to MySQL server (without specifying a database)
