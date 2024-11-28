@@ -1,33 +1,34 @@
 <?php
-session_start();
-include 'db.php'; // Include the database connection
+    session_start();
+    include 'session_check.php';
+    include 'db.php'; // Include the database connection
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // Handle form submission
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-    // Check if the user exists and is an admin
-    $stmt = $conn->prepare("SELECT id, password, role FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->bind_result($id, $hashedPassword, $role);
-    $stmt->fetch();
-    $stmt->close();
+        // Check if the user exists and is an admin
+        $stmt = $conn->prepare("SELECT id, password, role FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->bind_result($id, $hashedPassword, $role);
+        $stmt->fetch();
+        $stmt->close();
 
-    // Validate credentials and role
-    if ($role === 'admin' && password_verify($password, $hashedPassword)) {
-        // Set session variables
-        $_SESSION['user_id'] = $id;
-        $_SESSION['role'] = $role;
+        // Validate credentials and role
+        if ($role === 'admin' && password_verify($password, $hashedPassword)) {
+            // Set session variables
+            $_SESSION['user_id'] = $id;
+            $_SESSION['role'] = $role;
 
-        // Redirect to the admin dashboard
-        header("Location: admin-dashboard.php");
-        exit();
-    } else {
-        $error = "Invalid username, password, or access denied.";
+            // Redirect to the admin dashboard
+            header("Location: admin-dashboard.php");
+            exit();
+        } else {
+            $error = "Invalid username, password, or access denied.";
+        }
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             height: 100vh;
             background-color: #f4f4f4;
         }
+
         .login-container {
             background: #fff;
             padding: 20px;
@@ -66,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             margin-bottom: 5px;
         }
         input {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;

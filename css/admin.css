@@ -1,203 +1,209 @@
 * {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-}
-
-body {
-    width: 100%;
-    height: 100%;
-    background-color: #efeaea;
-}
-
-section[id="navbar"] {
-    display: flex;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    height: 50px;
-    background-color: #333;
-    z-index: 1;
-
-}
-
-section[id="navbar"] ul {
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin: 10px;
-}
-
-section[id="navbar"] a {
-    color: white;
-    text-decoration: none;
-}
-
-section[id="main"] {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - 50px);
-}
-
-.vertical-category {
-  position: absolute;
-  top: 50px; /* adjust this value to position it below the navbar */
-  left: 0;
-  width: auto;
-  height: calc(96vh - 50px); /* calculate the height of the screen minus the navbar height */
-  background-color: #f9f9f9;
-  padding: 10px;
-  border: 1px solid #ddd;
-}
-
-.vertical-category h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-.vertical-category ul {
-  width: auto;
-  list-style: none;
-  padding: 0;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
 }
 
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #efeaea;
+}
+
+section[id="navbar"] {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  height: 50px;
+  background-color: #333;
+  z-index: 1;
+}
+
+section[id="navbar"] ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 10px;
+}
+
+section[id="navbar"] a {
+  color: white;
+  text-decoration: none;
+}
+
+section[id="main"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 50px);
+}
+
+.vertical-category {
+position: absolute;
+top: 50px; /* adjust this value to position it below the navbar */
+left: 0;
+width: auto;
+height: calc(96vh - 50px); /* calculate the height of the screen minus the navbar height */
+background-color: #f9f9f9;
+padding: 10px;
+border: 1px solid #ddd;
+}
+
+.vertical-category h2 {
+margin-top: 0;
+margin-bottom: 20px;
+}
+
+.vertical-category ul {
+width: auto;
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
 .vertical-category li {
-  margin-bottom: 10px;
+margin-bottom: 10px;
 }
 
 .vertical-category a {
-  text-decoration: none;
-  color: #337ab7;
+text-decoration: none;
+color: #337ab7;
 }
 
 .vertical-category a:hover {
-  color: #23527c;
+color: #23527c;
 }
 
 #main {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .info-category {
-    position: absolute;
-    top: 50px;
-    left: 200px;
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    overflow: auto;
+  position: absolute;
+  top: 50px;
+  left: 200px;
+  right: 0; /* Adjust to fit the vertical category width */
+  bottom: 0; /* To ensure it does not exceed the viewport */
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  overflow-y: auto; /* Enables vertical scrolling */
+  box-sizing: border-box; /* Ensures padding doesn't exceed the set dimensions */
 }
 
 .info-category h2, p {
-    margin-top: 0;
-    color: #333;
+  margin-top: 0;
+  color: #333;
 }
 
 .category-container {
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f9f9f9;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background-color: #f9f9f9;
 }
 
 .category-title {
-  display: inline-block;
-  width: 100%;
+display: inline-block;
+width: 100%;
 }
 
 .category-title h2 {
-  text-align: center;
+text-align: center;
 }
 
 .category-container a {
-  color: #337ab7;
-  text-decoration: none;
+color: #337ab7;
+text-decoration: none;
 }
 
 /* Table Styling */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+width: auto;
+border-collapse: collapse;
+margin-top: 20px;
 }
 
 table, th, td {
-  border: 1px solid #ddd;
+border: 1px solid #ddd;
 }
 
 th, td {
-  padding: 10px;
-  text-align: left;
+padding: 10px;
+text-align: left;
 }
 
 th {
-  background-color: #f2f2f2;
+background-color: #f2f2f2;
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9;
+background-color: #f9f9f9;
 }
 
 /* Action Buttons for Edit and Delete */
 td a {
-  padding: 5px 10px;
-  margin-right: 10px;
-  border-radius: 5px;
-  font-size: 14px;
+padding: 5px 10px;
+margin-right: 10px;
+border-radius: 5px;
+font-size: 14px;
 }
 
 td a.edit {
-  background-color: #4CAF50;
+background-color: #4CAF50;
 }
 
 td a:hover {
-  opacity: 0.8;
+opacity: 0.8;
+}
+
+table td:nth-child(7) {
+width: 150px; /* Ensure enough space for buttons */
+padding: 8px;
+text-align: center;
 }
 
 /* Edit User Form Styles */
 form {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 40%;
-  margin: 20px auto;
+background-color: #fff;
+padding: 20px;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+width: 40%;
+margin: 20px auto;
 }
 
 form label {
-  font-size: 16px;
-  margin-bottom: 8px;
-  display: block;
+font-size: 16px;
+margin-bottom: 8px;
+display: block;
 }
 
 form input, form select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+width: 100%;
+padding: 10px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 14px;
 }
 
 form button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  border-radius: 5px;
-  font-size: 16px;
+background-color: #4CAF50;
+color: white;
+border: none;
+padding: 10px;
+width: 100%;
+border-radius: 5px;
+font-size: 16px;
 }
 
 form button:hover {
-  background-color: #45a049;
+background-color: #45a049;
 }

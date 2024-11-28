@@ -93,6 +93,11 @@ nav ul li a {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 20px; /* Keep it sticky just below navbar */
+    height: auto;
+    max-height: 90vh; /* Limit the height to 90% of the viewport */
+    overflow-y: auto; /* Add scroll if content overflows */
 }
 
 #filterSection h2 {
@@ -149,24 +154,22 @@ nav ul li a {
     border-radius: 10px;
 }
 
-/* Products Grid Layout */
-.productCard {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+/* Flex Layout for Product Cards */
+.productCards {
+    display: flex;
+    flex-wrap: wrap; /* Ensure items can wrap */
+    gap: 20px;
+    width: 100%; /* Make product card stretch across the section */
 }
 
 .product {
+    flex: 1 1 calc(33.333% - 20px); /* Three items per row */
+    max-width: calc(33.333% - 20px); /* Ensures consistent sizing */
     background-color: #fff;
     border-radius: 5px;
-    padding: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease;
-}
-
-.product:hover {
-    transform: translateY(-10px);
 }
 
 .product img {
@@ -188,15 +191,39 @@ nav ul li a {
     margin-top: 5px;
 }
 
-.productCard button {
+.product button {
     background-color: #007BFF;
     color: #fff;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 10px;
 }
 
-.productCard button:hover {
-    background-color: #0056b3;
+.product:hover {
+    transform: translateY(-10px);
+}
+
+/* Make sure the products stay in 3 per row */
+@media screen and (max-width: 768px) {
+    /* For tablets and small desktops */
+    .product {
+        flex: 1 1 calc(50% - 20px); /* Two items per row */
+    }
+
+    #shopSection {
+        flex-direction: column; /* Stack filter and product section vertically */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* For small devices */
+    .product {
+        flex: 1 1 calc(100% - 20px); /* One item per row */
+    }
+    
+    #shopSection {
+        flex-direction: column; /* Stack filter and product section vertically */
+    }
 }

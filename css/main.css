@@ -10,6 +10,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
 }
+
 #navbarSection {
     display: flex;
     flex-direction: row;
@@ -267,62 +268,115 @@ nav ul li a {
 }
 
 #footerSection {
-    padding: 10px;
-    width: auto;
-    height: auto;
-    background-color: #010101;
-    border-top-style: solid;
+    background-color: #f2f2f2;
+    color: #000;
+    padding: 40px 20px;
 }
 
 .footerContainer {
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: auto;
-    gap: 100px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .footerLogoContainer {
-    display: flex;
-    flex-direction: column;
-    width: auto;
-    height: auto;
-    gap: 20px;
+    flex: 1 1 250px;
+    text-align: left;
 }
 
-.footerLogoContainer label, p {
-    font-size: 15px;
-    color: #fff;
+.footer-logo {
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.contactContainer h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.quickLinksContainer {
+    flex: 1 1 200px;
+}
+
+.quickLinksContainer h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.quickLinksContainer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.quickLinksContainer ul li {
+    margin-bottom: 8px;
+}
+
+.quickLinksContainer ul li a {
+    text-decoration: none;
+    color: #000;
+    transition: color 0.3s ease;
+}
+
+.quickLinksContainer ul li a:hover {
+    color: #FC4C69;
 }
 
 .newsletterContainer {
-    min-width: 450px;
-    height: fit-content;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 10px;
+    flex: 1 1 300px;
+    text-align: left;
 }
 
-.newsletterContainer label {
-    font-size: 25px;
-    color: #413c3c;
+.newsletterContainer h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
 }
 
 .newsletterContainer input {
     width: 100%;
-    border: 1px solid #000;
-    height: 20px;
-    border-radius: 10px;
-    background-color: #fff;
-    color: #000;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
 }
 
 .newsletterContainer button {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: #FC4C69;
+    color: #fff;
+    padding: 10px 20px;
     border: none;
-    padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    margin: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.newsletterContainer button:hover {
+    background-color: #f93959;
+}
+
+.social-icons {
+    margin-top: 20px;
+}
+
+.social-icons a {
+    margin-right: 10px;
+}
+
+.social-icons img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.social-icons img:hover {
+    transform: scale(1.1);
+}
+
+.footerBottom {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
 }

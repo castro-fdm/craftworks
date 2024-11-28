@@ -111,6 +111,7 @@ input[name="usernameField"], input[name="passwordField"], input[name="emailField
 }
 button[type="submit"] {
     background-color: #333;
+    width: 100%;
     color: #fff;
     border: none;
     padding: 10px 20px;

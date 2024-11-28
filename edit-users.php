@@ -1,56 +1,57 @@
 <?php
-session_start();
-include 'db.php'; // Include database connection
+    session_start();
+    include 'session_check.php';
+    include 'db.php'; // Include database connection
 
-// Check if the user is logged in and is an admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: admin-login.php");
-    exit("Access denied");
-}
-
-// Check if the user ID is set in the query parameter
-if (isset($_GET['id'])) {
-    $user_id = $_GET['id'];
-
-    // Fetch the user data from the database
-    $sql = "SELECT * FROM users WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-} else {
-    echo "No user found!";
-    exit;
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $role = $_POST['role'];
-    $password = $_POST['password'];
-
-    // If password is provided, hash it before saving
-    if (!empty($password)) {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the new password
-        $update_sql = "UPDATE users SET username = ?, email = ?, role = ?, password = ? WHERE id = ?";
-        $stmt = $conn->prepare($update_sql);
-        $stmt->bind_param("ssssi", $username, $email, $role, $hashedPassword, $user_id);
-    } else {
-        // If no password is provided, just update the other fields
-        $update_sql = "UPDATE users SET username = ?, email = ?, role = ? WHERE id = ?";
-        $stmt = $conn->prepare($update_sql);
-        $stmt->bind_param("sssi", $username, $email, $role, $user_id);
+    // Check if the user is logged in and is an admin
+    if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+        header("Location: admin-login.php");
+        exit("Access denied");
     }
 
-    if ($stmt->execute()) {
-        echo "User updated successfully!";
-        header("Location: admin-dashboard.php");
+    // Check if the user ID is set in the query parameter
+    if (isset($_GET['id'])) {
+        $user_id = $_GET['id'];
+
+        // Fetch the user data from the database
+        $sql = "SELECT * FROM users WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    } else {
+        echo "No user found!";
         exit;
-    } else {
-        echo "Failed to update user.";
     }
-}
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $role = $_POST['role'];
+        $password = $_POST['password'];
+
+        // If password is provided, hash it before saving
+        if (!empty($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the new password
+            $update_sql = "UPDATE users SET username = ?, email = ?, role = ?, password = ? WHERE id = ?";
+            $stmt = $conn->prepare($update_sql);
+            $stmt->bind_param("ssssi", $username, $email, $role, $hashedPassword, $user_id);
+        } else {
+            // If no password is provided, just update the other fields
+            $update_sql = "UPDATE users SET username = ?, email = ?, role = ? WHERE id = ?";
+            $stmt = $conn->prepare($update_sql);
+            $stmt->bind_param("sssi", $username, $email, $role, $user_id);
+        }
+
+        if ($stmt->execute()) {
+            echo "User updated successfully!";
+            header("Location: admin-dashboard.php");
+            exit;
+        } else {
+            echo "Failed to update user.";
+        }
+    }
 ?>
 
 <!DOCTYPE html>

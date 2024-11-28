@@ -1,58 +1,60 @@
 <?php
-include 'db.php'; // Include database connection
+    session_start();
+    include 'session_check.php';
+    include 'db.php'; // Include database connection
 
-// Fetch item details based on the ID
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $sql = "SELECT * FROM inventory WHERE id = $id";
-    $result = mysqli_query($conn, $sql);
+    // Fetch item details based on the ID
+    if (isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+        $sql = "SELECT * FROM inventory WHERE id = $id";
+        $result = mysqli_query($conn, $sql);
 
-    if ($result && mysqli_num_rows($result) > 0) {
-        $item = mysqli_fetch_assoc($result);
-    } else {
-        die("Item not found.");
-    }
-}
-
-// Handle form submission to update the item
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = intval($_POST['id']);
-    $product_name = mysqli_real_escape_string($conn, $_POST['product_name']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
-    
-    // If the user uploads a new image, use the new image path
-    $image_path = $item['image_path'];  // Default to current image if no new upload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $product_image_dir = 'product_images/';
-        $image_name = basename($_FILES['image']['name']);
-        $image_path = $product_image_dir . uniqid() . '-' . $image_name;
-
-        // Ensure the upload directory exists
-        if (!is_dir($product_image_dir)) {
-            mkdir($product_image_dir, 0755, true);
-        }
-
-        // Move the uploaded file
-        if (!move_uploaded_file($_FILES['image']['tmp_name'], $image_path)) {
-            die("Failed to upload image.");
+        if ($result && mysqli_num_rows($result) > 0) {
+            $item = mysqli_fetch_assoc($result);
+        } else {
+            die("Item not found.");
         }
     }
 
-    $price = floatval($_POST['price']);
-    $quantity = intval($_POST['quantity']);
+    // Handle form submission to update the item
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id = intval($_POST['id']);
+        $product_name = mysqli_real_escape_string($conn, $_POST['product_name']);
+        $description = mysqli_real_escape_string($conn, $_POST['description']);
+        
+        // If the user uploads a new image, use the new image path
+        $image_path = $item['image_path'];  // Default to current image if no new upload
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $product_image_dir = 'product_images/';
+            $image_name = basename($_FILES['image']['name']);
+            $image_path = $product_image_dir . uniqid() . '-' . $image_name;
 
-    // Update the item in the database
-    $sql = "UPDATE inventory 
-            SET product_name = '$product_name', description = '$description', image_path = '$image_path', price = $price, quantity = $quantity 
-            WHERE id = $id";
+            // Ensure the upload directory exists
+            if (!is_dir($product_image_dir)) {
+                mkdir($product_image_dir, 0755, true);
+            }
 
-    if (mysqli_query($conn, $sql)) {
-        header("Location: admin-dashboard.php?category=Items");
-        exit();
-    } else {
-        echo "Error updating item: " . mysqli_error($conn);
+            // Move the uploaded file
+            if (!move_uploaded_file($_FILES['image']['tmp_name'], $image_path)) {
+                die("Failed to upload image.");
+            }
+        }
+
+        $price = floatval($_POST['price']);
+        $quantity = intval($_POST['quantity']);
+
+        // Update the item in the database
+        $sql = "UPDATE inventory 
+                SET product_name = '$product_name', description = '$description', image_path = '$image_path', price = $price, quantity = $quantity 
+                WHERE id = $id";
+
+        if (mysqli_query($conn, $sql)) {
+            header("Location: admin-dashboard.php?category=Items");
+            exit();
+        } else {
+            echo "Error updating item: " . mysqli_error($conn);
+        }
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -70,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </ul>
     </section>
     <section id="main">
+    <h2>Edit Product: <?php echo htmlspecialchars($item['product_name']); ?></h2>
         <form action="edit-item.php" method="POST" enctype="multipart/form-data">
-        <h2>Edit Product: <?php echo htmlspecialchars($item['product_name']); ?></h2>
             <input type="hidden" name="id" value="<?php echo $item['id']; ?>">
 
             <label for="product_name">Product Name:</label>

@@ -1,12 +1,13 @@
 <?php
-session_start();
-include 'db.php'; // Include database connection
+    session_start();
+    include 'session_check.php';
+    include 'db.php'; // Include database connection
 
-// Check if the user is logged in and is an admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: admin-login.php");
-    exit("Access denied");
-}
+    // Check if the user is logged in and is an admin
+    if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+        header("Location: admin-login.php");
+        exit("Access denied");
+    }
 ?>
 
 <!DOCTYPE html>
@@ -23,13 +24,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     <section id="navbar">
         <ul>
             <li><a href="admin-dashboard.php">Admin</a></li>
-            <li><a href="index.html" style="margin-right: 40px;">Logout</a></li>
+            <li><a href="admin-login.php" style="margin-right: 40px;">Logout</a></li>
         </ul>
     </section>
     <section id="main">
         <div class="vertical-category">
             <div class="category-title">
-                <h2>Utilities</h2>
+                <h2>Categories</h2>
             </div>
             <ul>
                 <div class="category-container">

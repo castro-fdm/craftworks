@@ -10,14 +10,14 @@
 <body>
     <section id="navBar">
         <div class="logoContainer">
-            <a id="logo-link" href="index.html"><img id="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
+            <a id="logo-link" href="index.php"><img id="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
         </div>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="shop.php">Shop</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="login.php">Login</a></li>
             </ul> 
         </nav>
     </section>
@@ -64,8 +64,8 @@
                     dataType: 'json',
                     success: function (response) {
                         if (response.success) {
-                            // Redirect to index.html on successful signup
-                            window.location.href = 'index.html';
+                            // Redirect to index.php on successful signup
+                            window.location.href = 'login.php';
                         } else {
                             // Display error messages
                             if (response.errors.username) {
