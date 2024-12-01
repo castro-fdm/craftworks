@@ -20,7 +20,8 @@
 
         if ($stmt->execute()) {
             echo "User deleted successfully!";
-            header("Location: admin-dashboard.php");
+            $category = $_POST['category'] ?? 'Users'; // Get category from request
+            header("Location: admin-dashboard.php?category=$category");
             exit;
         } else {
             echo "Failed to delete user.";

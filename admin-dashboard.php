@@ -2,6 +2,7 @@
     session_start();
     include 'session_check.php';
     include 'db.php'; // Include database connection
+    $currentCategory = $_GET['category'] ?? 'Dashboard'; // Default to Dashboard if no category is specified
 
     // Check if the user is logged in and is an admin
     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
@@ -34,19 +35,19 @@
             </div>
             <ul>
                 <div class="category-container">
-                    <li><a href="#" onclick="displayCategory('Users')">Users</a></li>
+                    <li><a href="admin-dashboard.php?category=Users">Users</a></li>
                 </div>
                 <div class="category-container">
-                    <li><a href="#" onclick="displayCategory('Items')">Items</a></li>
+                    <li><a href="admin-dashboard.php?category=Items">Items</a></li>
                 </div>
                 <div class="category-container">
-                    <li><a href="#" onclick="displayCategory('Payments')">Payments</a></li>
+                    <li><a href="admin-dashboard.php?category=Payments">Payments</a></li>
                 </div>
                 <div class="category-container">
-                    <li><a href="#" onclick="displayCategory('Product Analysis')">Product Analysis</a></li>
+                    <li><a href="admin-dashboard.php?category=Product_Analysis">Product Analysis</a></li>
                 </div>
                 <div class="category-container">
-                    <li><a href="#" onclick="displayCategory('Reviews')">Reviews</a></li>
+                    <li><a href="admin-dashboard.php?category=Reviews">Reviews</a></li>
                 </div>
             </ul>
         </div>
@@ -127,6 +128,11 @@
                 xhr.send('id=' + id);
             }
         }
+        // Automatically load the category on page load
+        window.onload = function() {
+            const category = "<?php echo htmlspecialchars($currentCategory, ENT_QUOTES, 'UTF-8'); ?>";
+            displayCategory(category);
+        };
     </script>
 </body>
 </html>

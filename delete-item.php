@@ -14,7 +14,8 @@
 
         if ($stmt->execute()) {
             echo "Item deleted successfully!";
-            header("Location: admin-dashboard.php");
+            $category = $_POST['category'] ?? 'Items'; // Get category from request
+            header("Location: admin-dashboard.php?category=$category");
             exit;
         } else {
             echo "Failed to delete item.";

@@ -49,8 +49,10 @@
                 WHERE id = $id";
 
         if (mysqli_query($conn, $sql)) {
-            header("Location: admin-dashboard.php?category=Items");
-            exit();
+            echo "Item updated successfully!";
+            $category = $_POST['category'] ?? 'Items'; // Get category from request
+            header("Location: admin-dashboard.php?category=$category");
+            exit;
         } else {
             echo "Error updating item: " . mysqli_error($conn);
         }

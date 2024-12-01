@@ -46,6 +46,7 @@
                 VALUES ('$product_name', '$description', '$image_path', '$price', '$quantity')";
 
         if (mysqli_query($conn, $sql)) {
+            echo "Item added successfully!";
             header("Location: admin-dashboard.php?category=Items");
             exit;
         } else {
