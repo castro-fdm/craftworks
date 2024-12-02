@@ -8,8 +8,9 @@
     // Enable error reporting for debugging
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
+
     // Fetch all products from the database
-    $query = "SELECT product_name, description, image_path, price, quantity FROM inventory ORDER BY id ASC";
+    $query = "SELECT id, product_name, description, image_path, price, quantity FROM inventory ORDER BY id ASC";
     $result = $conn->query($query);
 
     if (!$result) {

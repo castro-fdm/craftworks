@@ -45,7 +45,7 @@
         id INT AUTO_INCREMENT PRIMARY KEY,
         product_name VARCHAR(150) NOT NULL,
         description TEXT,
-        image_url VARCHAR(255),
+        image_path VARCHAR(255),
         price DECIMAL(10,2) NOT NULL,
         quantity INT NOT NULL DEFAULT 0
     )";
@@ -53,17 +53,28 @@
         die("Error creating inventory table: " . $conn->error);
     }
 
+    // Create the Cart table
+    $sql = "CREATE TABLE IF NOT EXISTS cart (
+        id INT AUTO_INCREMENT PRIMARY KEY,               -- Auto-incremented primary key
+        user_id INT NOT NULL,                            -- Foreign key to users.id
+        product_id INT NOT NULL,                         -- Foreign key to inventory.id
+        quantity INT NOT NULL CHECK (quantity > 0),      -- Quantity of the product, must be greater than 0
+        added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    -- Timestamp for when the item was added
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,  -- Cascade delete when a user is deleted
+        FOREIGN KEY (product_id) REFERENCES inventory(id) ON DELETE CASCADE -- Cascade delete when a product is deleted
+    )";
+    if (!$conn->query($sql)) {
+        die("Error creating cart table: " . $conn->error);
+    }
+
     // Create the Payments table
     $sql = "CREATE TABLE IF NOT EXISTS payments (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        product_id INT NOT NULL,
-        payment_method ENUM('COD') NOT NULL,
-        price DECIMAL(10,2) NOT NULL,
-        quantity INT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (product_id) REFERENCES inventory(id) ON DELETE CASCADE
+        id INT AUTO_INCREMENT PRIMARY KEY,                     -- Auto-incremented primary key
+        user_id INT NOT NULL,                                  -- Foreign key to users.id
+        total_amount DECIMAL(10,2) NOT NULL,                   -- Total amount of the payment
+        payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,      -- Timestamp for when the payment was made
+        payment_status ENUM('Pending', 'Completed') NOT NULL DEFAULT 'Pending', -- Payment status
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE -- Cascade delete when a user is deleted
     )";
     if (!$conn->query($sql)) {
         die("Error creating payments table: " . $conn->error);

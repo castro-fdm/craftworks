@@ -116,31 +116,55 @@
         }
 
         function displayProducts(products) {
-        const productCardsContainer = document.getElementById('productCards');
-        productCardsContainer.innerHTML = ''; // Clear existing products
+            const productCardsContainer = document.getElementById('productCards');
+            productCardsContainer.innerHTML = ''; // Clear existing products
 
-        if (products.length === 0) {
-            productCardsContainer.innerHTML = '<p>No products found.</p>';
-            return;
+            if (products.length === 0) {
+                productCardsContainer.innerHTML = '<p>No products found.</p>';
+                return;
+            }
+
+            products.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+
+                const price = product.price ? parseFloat(product.price) : 0;
+
+                productDiv.innerHTML = `
+                    <img src="${product.image_path}" alt="${product.product_name}">
+                    <h3>${product.product_name}</h3>
+                    <p>${product.description}</p>
+                    <p class="price">₱${price.toFixed(2)}</p>
+                    <button class="add-to-cart" data-id="${product.id}" data-quantity="1">Add to Cart</button>
+                `;
+
+                productCardsContainer.appendChild(productDiv);
+            });
+
+            // Attach event listeners to buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const productId = event.target.getAttribute('data-id');
+                    const quantity = event.target.getAttribute('data-quantity');
+
+                    // Send data to the server
+                    fetch('add-to-cart.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `product_id=${productId}&quantity=${quantity}`
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        alert(data); // Display server response
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
         }
-
-        products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'product';
-
-            // Safely parse price
-            const price = product.price ? parseFloat(product.price) : 0;
-
-            productDiv.innerHTML = `
-                <img src="${product.image_path}" alt="${product.product_name}">
-                <h3>${product.product_name}</h3>
-                <p>${product.description}</p>
-                <p class="price">₱${price.toFixed(2)}</p>
-                <button>Add to Cart</button>
-            `;
-            productCardsContainer.appendChild(productDiv);
-        });
-    }
     </script>
 </body>
 </html>
