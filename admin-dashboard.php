@@ -41,7 +41,7 @@
                     <li><a href="admin-dashboard.php?category=Items">Items</a></li>
                 </div>
                 <div class="category-container">
-                    <li><a href="admin-dashboard.php?category=Payments">Payments</a></li>
+                    <li><a href="admin-dashboard.php?category=Orders">Orders</a></li>
                 </div>
                 <div class="category-container">
                     <li><a href="admin-dashboard.php?category=Product_Analysis">Product Analysis</a></li>
@@ -75,8 +75,8 @@
                 loadUsers(contentDiv);
             } else if (category === "Items") {
                 loadItems(contentDiv);
-            } else if (category === "Payments") {
-                contentDiv.innerHTML = "<p>Payments data will be displayed here.</p>";
+            } else if (category === "Orders") {
+                loadOrders(contentDiv);
             } else if (category === "Product Analysis") {
                 contentDiv.innerHTML = "<p>Product analysis data will be displayed here.</p>";
             } else if (category === "Reviews") {
@@ -111,6 +111,21 @@
             };
             xhr.send();
         }
+
+        // Function to load order data
+        function loadOrders(contentDiv) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get-orders.php', true); // Fetch order data
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    contentDiv.innerHTML = xhr.responseText;
+                } else {
+                    contentDiv.innerHTML = "<p>Failed to load order data.</p>";
+                }
+            };
+            xhr.send();
+        }
+
         // Global function to delete an item
         function deleteItem(id) {
             if (confirm("Are you sure you want to delete this item?")) {

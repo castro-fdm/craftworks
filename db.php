@@ -67,17 +67,20 @@
         die("Error creating cart table: " . $conn->error);
     }
 
-    // Create the Payments table
-    $sql = "CREATE TABLE IF NOT EXISTS payments (
+    // Create the Orders table
+    $sql = "CREATE TABLE IF NOT EXISTS orders (
         id INT AUTO_INCREMENT PRIMARY KEY,                     -- Auto-incremented primary key
         user_id INT NOT NULL,                                  -- Foreign key to users.id
-        total_amount DECIMAL(10,2) NOT NULL,                   -- Total amount of the payment
-        payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,      -- Timestamp for when the payment was made
-        payment_status ENUM('Pending', 'Completed') NOT NULL DEFAULT 'Pending', -- Payment status
+        product_names TEXT NOT NULL,                           -- Product names (comma-separated list)
+        payment_method ENUM('Cash on Delivery', 'E-wallet') NOT NULL DEFAULT 'Cash on Delivery', -- Payment method
+        billing_address VARCHAR(255) NOT NULL,                  -- Billing address
+        order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,        -- Timestamp for when the order was made
+        total_amount DECIMAL(10,2) NOT NULL,                   -- Total amount of the order
+        order_status ENUM('Pending', 'Completed') NOT NULL DEFAULT 'Pending', -- Order status
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE -- Cascade delete when a user is deleted
     )";
     if (!$conn->query($sql)) {
-        die("Error creating payments table: " . $conn->error);
+        die("Error creating orders table: " . $conn->error);
     }
 
     // Insert a sample admin user for testing

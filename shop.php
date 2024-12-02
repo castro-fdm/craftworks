@@ -81,10 +81,10 @@
         });
 
         function loadProducts() {
-    const category = document.getElementById('category').value;
-    const priceRange = document.getElementById('priceRange').value;
-    const sort = document.getElementById('sort').value;
-    const searchQuery = document.getElementById('searchBar').value.toLowerCase();
+        const category = document.getElementById('category').value;
+        const priceRange = document.getElementById('priceRange').value;
+        const sort = document.getElementById('sort').value;
+        const searchQuery = document.getElementById('searchBar').value.toLowerCase();
 
         fetch('./get-products.php')
             .then(response => response.text())  // Get raw response as text

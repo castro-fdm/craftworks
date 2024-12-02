@@ -1,4 +1,5 @@
 <?php
+    var_dump($_POST);
     session_start();
     include 'db.php';
 
@@ -9,8 +10,13 @@
 
     $user_id = $_SESSION['user_id'];
 
+    // Fetch the payment method and billing address from the form
+    $payment_method = $_POST['payment_method'] ?? 'Cash on Delivery'; // Default to 'Cash on Delivery' if not set
+    // Sanitize billing address
+    $billing_address = mysqli_real_escape_string($conn, $_POST['billing_address'] ?? ''); // Default to empty if not set
+
     // Calculate total amount
-    $sql = "SELECT c.product_id, c.quantity, i.price
+    $sql = "SELECT c.product_id, c.quantity, i.price, i.product_name
             FROM cart c
             JOIN inventory i ON c.product_id = i.id
             WHERE c.user_id = ?";
@@ -21,22 +27,27 @@
 
     $total_amount = 0;
     $cart_items = [];
+    $product_names = [];
+
     while ($row = $result->fetch_assoc()) {
         if ($row['quantity'] > $row['price']) {
             die("Insufficient inventory for product ID " . $row['product_id']);
         }
         $total_amount += $row['price'] * $row['quantity'];
         $cart_items[] = $row; // Store for inventory deduction
+        $product_names[] = $row['product_name']; // Collect product names
     }
 
-    // Log payment
-    $sql = "INSERT INTO payments (user_id, total_amount, payment_date, payment_status)
-            VALUES (?, ?, NOW(), 'Completed')";
+    // Log order with payment method, billing address, and product names
+    $product_names_str = implode(', ', $product_names); // Convert product names array to string
+
+    $sql = "INSERT INTO orders (user_id, total_amount, order_date, order_status, payment_method, billing_address, product_names)
+            VALUES (?, ?, NOW(), 'Pending', ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("id", $user_id, $total_amount);
+    $stmt->bind_param("idsss", $user_id, $total_amount, $payment_method, $billing_address, $product_names_str);
 
     if ($stmt->execute()) {
-        $payment_id = $stmt->insert_id;
+        $order_id = $stmt->insert_id;
 
         // Deduct inventory
         foreach ($cart_items as $item) {
@@ -52,7 +63,7 @@
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
 
-        echo "Checkout successful! Payment logged.";
+        header("Location: shop.php");
     } else {
         echo "Failed to process checkout!";
     }
