@@ -83,6 +83,20 @@
         die("Error creating orders table: " . $conn->error);
     }
 
+    // Create the Sales table
+    $sql = "CREATE TABLE IF NOT EXISTS sales (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        product_id INT NOT NULL,
+        quantity INT NOT NULL,
+        sale_amount DECIMAL(10,2) NOT NULL,
+        sale_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (product_id) REFERENCES inventory(id) ON DELETE CASCADE
+    )";
+    if (!$conn->query($sql)) {
+        die("Error creating sales table: " . $conn->error);
+    }
+
+
     // Insert a sample admin user for testing
     $adminPassword = password_hash("admin123", PASSWORD_DEFAULT); // Securely hash passwords
     $sql = "INSERT INTO users (username, email, phone_number, password, role) 

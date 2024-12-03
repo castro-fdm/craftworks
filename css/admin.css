@@ -207,3 +207,13 @@ font-size: 16px;
 form button:hover {
 background-color: #45a049;
 }
+
+/* Example CSS for product analysis */
+#category-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#category-content li {
+  margin: 10px 0;
+}

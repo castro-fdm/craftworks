@@ -49,6 +49,16 @@
     if ($stmt->execute()) {
         $order_id = $stmt->insert_id;
 
+        // Log each product sale in the sales table
+        foreach ($cart_items as $item) {
+            $sale_amount = $item['price'] * $item['quantity'];
+            $sql = "INSERT INTO sales (product_id, quantity, sale_amount) 
+                    VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iid", $item['product_id'], $item['quantity'], $sale_amount);
+            $stmt->execute();
+        }
+
         // Deduct inventory
         foreach ($cart_items as $item) {
             $sql = "UPDATE inventory SET quantity = quantity - ? WHERE id = ?";
