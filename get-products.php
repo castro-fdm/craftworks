@@ -1,6 +1,4 @@
 <?php
-    session_start();
-    include 'session_check.php';
     require 'db.php';
 
     header('Content-Type: application/json');

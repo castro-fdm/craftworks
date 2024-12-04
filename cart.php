@@ -1,106 +1,106 @@
 <?php
-session_start();
-include 'db.php';
+    session_start();
+    include 'db.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
-$user_id = $_SESSION['user_id'];
-
-// Initialize cart_items and total_amount
-$cart_items = [];
-$total_amount = 0;
-
-// Fetch all items in the user's cart
-$sql = "SELECT c.id AS cart_id, i.product_name, i.price, c.quantity, (i.price * c.quantity) AS total
-        FROM cart c
-        JOIN inventory i ON c.product_id = i.id
-        WHERE c.user_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $cart_items[] = $row;  // Add items to cart array
-        $total_amount += $row['total'];  // Calculate total amount
+    // Check if user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit;
     }
-} else {
-    header("Location: shop.php");
-    exit;
-}
 
-// Handle updates to product quantities, and save payment method, billing address
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['cart_id'], $_POST['quantity'], $_POST['payment_method'], $_POST['billing_address'])) {
-        $cart_id = intval($_POST['cart_id']);
-        $quantity = intval($_POST['quantity']);
-        $payment_method = $_POST['payment_method'];
-        $billing_address = $_POST['billing_address'];
+    $user_id = $_SESSION['user_id'];
 
-        // Sanitize billing address
-        $billing_address = mysqli_real_escape_string($conn, $_POST['billing_address']);
+    // Initialize cart_items and total_amount
+    $cart_items = [];
+    $total_amount = 0;
 
-        // Update the cart item quantity
-        if ($quantity > 0) {
-            $sql = "UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iii", $quantity, $cart_id, $user_id);
-            $stmt->execute();
-        } else {
-            // Remove item from cart if quantity is set to 0
-            $sql = "DELETE FROM cart WHERE id = ? AND user_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ii", $cart_id, $user_id);
-            $stmt->execute();
+    // Fetch all items in the user's cart
+    $sql = "SELECT c.id AS cart_id, i.product_name, i.price, c.quantity, (i.price * c.quantity) AS total
+            FROM cart c
+            JOIN inventory i ON c.product_id = i.id
+            WHERE c.user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $cart_items[] = $row;  // Add items to cart array
+            $total_amount += $row['total'];  // Calculate total amount
         }
+    } else {
+        header("Location: shop.php");
+        exit;
+    }
 
-        // Insert order with payment method and billing address
-        // Collect product names as a string
-        $product_names = implode(',', array_column($cart_items, 'product_name'));
+    // Handle updates to product quantities, and save payment method, billing address
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['cart_id'], $_POST['quantity'], $_POST['payment_method'], $_POST['billing_address'])) {
+            $cart_id = intval($_POST['cart_id']);
+            $quantity = intval($_POST['quantity']);
+            $payment_method = $_POST['payment_method'];
+            $billing_address = $_POST['billing_address'];
 
-        // Insert order into orders table
-        $sql = "INSERT INTO orders (user_id, total_amount, payment_method, billing_address, product_names)
-                VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("idsss", $user_id, $total_amount, $payment_method, $billing_address, $product_names);
+            // Sanitize billing address
+            $billing_address = mysqli_real_escape_string($conn, $_POST['billing_address']);
 
-        // Begin a transaction to ensure all operations are completed successfully
-        $conn->begin_transaction();
-
-        try {
-            // Execute the insert
-            $stmt->execute();
-            $order_id = $stmt->insert_id;
-
-            // Deduct inventory for each item in the cart
-            foreach ($cart_items as $item) {
-                $sql = "UPDATE inventory SET quantity = quantity - ? WHERE id = ?";
+            // Update the cart item quantity
+            if ($quantity > 0) {
+                $sql = "UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ii", $item['quantity'], $item['cart_id']);
+                $stmt->bind_param("iii", $quantity, $cart_id, $user_id);
+                $stmt->execute();
+            } else {
+                // Remove item from cart if quantity is set to 0
+                $sql = "DELETE FROM cart WHERE id = ? AND user_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ii", $cart_id, $user_id);
                 $stmt->execute();
             }
 
-            // Clear the cart after checkout
-            $sql = "DELETE FROM cart WHERE user_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
+            // Insert order with payment method and billing address
+            // Collect product names as a string
+            $product_names = implode(',', array_column($cart_items, 'product_name'));
 
-            // Commit the transaction if everything went well
-            $conn->commit();
-            header("Location: shop.php");
-        } catch (Exception $e) {
-            // Rollback the transaction if anything went wrong
-            $conn->rollback();
-            echo "Failed to process checkout: " . $e->getMessage();
+            // Insert order into orders table
+            $sql = "INSERT INTO orders (user_id, total_amount, payment_method, billing_address, product_names)
+                    VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("idsss", $user_id, $total_amount, $payment_method, $billing_address, $product_names);
+
+            // Begin a transaction to ensure all operations are completed successfully
+            $conn->begin_transaction();
+
+            try {
+                // Execute the insert
+                $stmt->execute();
+                $order_id = $stmt->insert_id;
+
+                // Deduct inventory for each item in the cart
+                foreach ($cart_items as $item) {
+                    $sql = "UPDATE inventory SET quantity = quantity - ? WHERE id = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("ii", $item['quantity'], $item['cart_id']);
+                    $stmt->execute();
+                }
+
+                // Clear the cart after checkout
+                $sql = "DELETE FROM cart WHERE user_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+
+                // Commit the transaction if everything went well
+                $conn->commit();
+                header("Location: shop.php");
+            } catch (Exception $e) {
+                // Rollback the transaction if anything went wrong
+                $conn->rollback();
+                echo "Failed to process checkout: " . $e->getMessage();
+            }
         }
     }
-}
 ?>
 
 <!DOCTYPE html>

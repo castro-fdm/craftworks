@@ -1,6 +1,5 @@
 <?php
     session_start();
-    include 'session_check.php';
     include 'db.php'; // Include database connection
 
     // Check if the item ID is set in the query parameter

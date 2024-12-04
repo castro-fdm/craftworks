@@ -17,11 +17,11 @@
             <a id="logo-link" href="index.php"><img id="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
         </div>
         <nav>
-            <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="shop.php">Shop</a></li>
-                <li><a href="cart.php">Cart</a></li>
+            <ul style="line-height: 30px;">
+                <li><a href="index.php"><img style="width: 100%; max-width: 30px;" src="res/home.png" alt="home"></a></li>
+                <li><a href="shop.php"><img style="width: 100%; max-width: 30px;" src="res/shopping-cart.png" alt="shop"></a></li>
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="cart.php"><img style="width: 100%; max-width: 30px;" src="res/shopping-bag.png" alt="cart"></a></li>
                     <li><a href="profile.php"><?= htmlspecialchars($_SESSION['username']) ?></a></li>
                     <li><a href="logout.php">Logout</a></li>
                 <?php else: ?>

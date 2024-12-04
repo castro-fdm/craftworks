@@ -1,56 +1,56 @@
 <?php
     include 'db.php';
 
-    $sql_weekly = "SELECT product_id, SUM(quantity) AS total_sales
-                FROM sales
-                WHERE sale_date >= CURDATE() - INTERVAL 7 DAY
-                GROUP BY product_id";
+    // Weekly sales query
+    $sql_weekly = "
+        SELECT inventory.product_name, SUM(sales.quantity) AS total_sales
+        FROM sales
+        JOIN inventory ON sales.product_id = inventory.id
+        WHERE sales.sale_date >= CURDATE() - INTERVAL 7 DAY
+        GROUP BY inventory.product_name";
     $weekly_result = $conn->query($sql_weekly);
 
-    $sql_monthly = "SELECT product_id, SUM(quantity) AS total_sales
-                    FROM sales
-                    WHERE sale_date >= CURDATE() - INTERVAL 1 MONTH
-                    GROUP BY product_id";
+    // Monthly sales query
+    $sql_monthly = "
+        SELECT inventory.product_name, SUM(sales.quantity) AS total_sales
+        FROM sales
+        JOIN inventory ON sales.product_id = inventory.id
+        WHERE sales.sale_date >= CURDATE() - INTERVAL 1 MONTH
+        GROUP BY inventory.product_name";
     $monthly_result = $conn->query($sql_monthly);
 
-    $sql_trends = "SELECT product_id, AVG(quantity) AS avg_sales
-                FROM sales
-                WHERE sale_date >= CURDATE() - INTERVAL 30 DAY
-                GROUP BY product_id";
+    // Future trends query
+    $sql_trends = "
+        SELECT inventory.product_name, AVG(sales.quantity) AS avg_sales
+        FROM sales
+        JOIN inventory ON sales.product_id = inventory.id
+        WHERE sales.sale_date >= CURDATE() - INTERVAL 30 DAY
+        GROUP BY inventory.product_name";
     $trends_result = $conn->query($sql_trends);
 
-    // Prepare data for display
-    $weekly_sales = [];
+    // Prepare data for JSON output
+    $data = [
+        'weekly' => [],
+        'monthly' => [],
+        'trends' => [],
+    ];
+
+    // Fetch weekly sales data
     while ($row = $weekly_result->fetch_assoc()) {
-        $weekly_sales[$row['product_id']] = $row['total_sales'];
+        $data['weekly'][] = [$row['product_name'], (int)$row['total_sales']];
     }
 
-    $monthly_sales = [];
+    // Fetch monthly sales data
     while ($row = $monthly_result->fetch_assoc()) {
-        $monthly_sales[$row['product_id']] = $row['total_sales'];
+        $data['monthly'][] = [$row['product_name'], (int)$row['total_sales']];
     }
 
-    $future_trends = [];
+    // Fetch future trends data
     while ($row = $trends_result->fetch_assoc()) {
-        $future_trends[$row['product_id']] = $row['avg_sales'];
+        $data['trends'][] = [$row['product_name'], (float)$row['avg_sales']];
     }
 
-    // Return the data as HTML
-    echo "<h3>Weekly Sales</h3><ul>";
-    foreach ($weekly_sales as $product_id => $sales) {
-        echo "<li>Product $product_id: $sales sales</li>";
-    }
-    echo "</ul>";
-
-    echo "<h3>Monthly Sales</h3><ul>";
-    foreach ($monthly_sales as $product_id => $sales) {
-        echo "<li>Product $product_id: $sales sales</li>";
-    }
-    echo "</ul>";
-
-    echo "<h3>Future Sales Trends</h3><ul>";
-    foreach ($future_trends as $product_id => $avg_sales) {
-        echo "<li>Product $product_id: Estimated avg. sales per day: $avg_sales</li>";
-    }
-    echo "</ul>";
+    // Return the data as JSON
+    header('Content-Type: application/json');
+    echo json_encode($data);
 ?>

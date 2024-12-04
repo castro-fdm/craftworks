@@ -1,6 +1,5 @@
 <?php
     session_start();
-    include 'session_check.php';
     require 'db.php'; // Include the database connection script
 
     // Check if the user is logged in

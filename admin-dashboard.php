@@ -1,6 +1,5 @@
 <?php
     session_start();
-    include 'session_check.php';
     include 'db.php'; // Include database connection
     $currentCategory = $_GET['category'] ?? 'Dashboard'; // Default to Dashboard if no category is specified
 
@@ -19,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/admin.css">
     <script src="/res/admin.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <title>Admin Dashboard</title>
 </head>
 <body>
@@ -126,17 +126,88 @@
             xhr.send();
         }
 
+        // Function to load order data
         function loadProductAnalysis(contentDiv) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'get-product-analytics.php', true); // New PHP file for product analysis
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    contentDiv.innerHTML = xhr.responseText;
-                } else {
-                    contentDiv.innerHTML = "<p>Failed to load product analysis data.</p>";
-                }
+            fetch('get-product-analytics.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Render the charts using Google Charts
+                    google.charts.load('current', { packages: ['corechart'] });
+                    google.charts.setOnLoadCallback(() => {
+                        drawWeeklySalesChart(data.weekly);
+                        drawMonthlySalesChart(data.monthly);
+                        drawFutureTrendsChart(data.trends);
+                    });
+
+                    // Clear previous content and add chart containers
+                    contentDiv.innerHTML = `
+                        <div id="weekly-sales-chart" style="width: 100%; height: 400px;"></div>
+                        <div id="monthly-sales-chart" style="width: 100%; height: 400px;"></div>
+                        <div id="future-trends-chart" style="width: 100%; height: 400px;"></div>
+                        <button id="print-charts" style="margin-top: 20px;">Print Charts</button>
+                    `;
+
+                    // Print button functionality
+                    document.getElementById('print-charts').onclick = function () {
+                        window.print();
+                    };
+                })
+                .catch(error => {
+                    contentDiv.innerHTML = '<p>Failed to load product analysis data.</p>';
+                    console.error('Error fetching analytics data:', error);
+                });
+        }
+
+        function drawWeeklySalesChart(data) {
+            const dataTable = google.visualization.arrayToDataTable([
+                ['Product Name', 'Total Sales'],
+                ...data
+            ]);
+
+            const options = {
+                title: 'Weekly Sales',
+                hAxis: { title: 'Product Name' },
+                vAxis: { title: 'Total Sales' },
+                legend: 'none'
             };
-            xhr.send();
+
+            const chart = new google.visualization.ColumnChart(document.getElementById('weekly-sales-chart'));
+            chart.draw(dataTable, options);
+        }
+
+        function drawMonthlySalesChart(data) {
+            const dataTable = google.visualization.arrayToDataTable([
+                ['Product Name', 'Total Sales'],
+                ...data
+            ]);
+
+            const options = {
+                title: 'Monthly Sales',
+                hAxis: { title: 'Product Name' },
+                vAxis: { title: 'Total Sales' },
+                legend: 'none'
+            };
+
+            const chart = new google.visualization.ColumnChart(document.getElementById('monthly-sales-chart'));
+            chart.draw(dataTable, options);
+        }
+
+        function drawFutureTrendsChart(data) {
+            const dataTable = google.visualization.arrayToDataTable([
+                ['Product Name', 'Avg. Sales'],
+                ...data
+            ]);
+
+            const options = {
+                title: 'Future Sales Trends',
+                hAxis: { title: 'Product Name' },
+                vAxis: { title: 'Avg. Sales Per Day' },
+                legend: 'none',
+                curveType: 'function' // Smooth curve for trend visualization
+            };
+
+            const chart = new google.visualization.LineChart(document.getElementById('future-trends-chart'));
+            chart.draw(dataTable, options);
         }
 
         // Global function to delete an item

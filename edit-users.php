@@ -1,6 +1,5 @@
 <?php
     session_start();
-    include 'session_check.php';
     include 'db.php'; // Include database connection
 
     // Check if the user is logged in and is an admin
