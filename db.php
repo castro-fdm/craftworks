@@ -76,7 +76,7 @@
         billing_address VARCHAR(255) NOT NULL,                  -- Billing address
         order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,        -- Timestamp for when the order was made
         total_amount DECIMAL(10,2) NOT NULL,                   -- Total amount of the order
-        order_status ENUM('Pending', 'Completed') NOT NULL DEFAULT 'Pending', -- Order status
+        order_status ENUM('Pending', 'Completed') NOT NULL DEFAULT 'Completed', -- Order status
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE -- Cascade delete when a user is deleted
     )";
     if (!$conn->query($sql)) {
@@ -96,6 +96,20 @@
         die("Error creating sales table: " . $conn->error);
     }
 
+    // Create the Reviews Table
+    $sql = "CREATE TABLE IF NOT EXISTS reviews (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        order_id INT NOT NULL,
+        user_id INT NOT NULL,
+        rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+        review_text TEXT,
+        review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );";
+    if (!$conn->query($sql)) {
+        die("Error creating sales table: " . $conn->error);
+    }
 
     // Insert a sample admin user for testing
     $adminPassword = password_hash("admin123", PASSWORD_DEFAULT); // Securely hash passwords

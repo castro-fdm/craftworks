@@ -20,7 +20,13 @@
                 <li><a href="index.php"><img style="width: 100%; max-width: 30px;" src="res/home.png" alt="home"></a></li>
                 <li><a href="shop.php"><img style="width: 100%; max-width: 30px;" src="res/shopping-cart.png" alt="shop"></a></li>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <li><a href="profile.php"><?= htmlspecialchars($_SESSION['username']) ?></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"><?= htmlspecialchars($_SESSION['username']) ?></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="profile.php">Profile</a></li>
+                            <li><a href="order.php">Orders</a></li>
+                        </ul>
+                    </li>
                     <li><a href="logout.php">Logout</a></li>
                 <?php else: ?>
                     <li><a href="login.php">Login</a></li>
@@ -123,6 +129,14 @@
         <div class="footerBottom">
             <p>&copy; 2024 CraftWorks. All Rights Reserved.</p>
         </div>
-    </section>     
+    </section>
+    <script>
+        document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                this.nextElementSibling.classList.toggle('show');
+            });
+        });
+    </script>     
 </body>
 </html>

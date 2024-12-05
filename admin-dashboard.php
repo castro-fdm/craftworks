@@ -80,7 +80,7 @@
             } else if (category === "Product-Analytics") {
                 loadProductAnalysis(contentDiv);
             } else if (category === "Reviews") {
-                contentDiv.innerHTML = "<p>Reviews data will be displayed here.</p>";
+                loadReviews(contentDiv);
             }
         }
 
@@ -156,6 +156,20 @@
                     contentDiv.innerHTML = '<p>Failed to load product analysis data.</p>';
                     console.error('Error fetching analytics data:', error);
                 });
+        }
+
+        // Function to load reviews data
+        function loadReviews(contentDiv) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get-reviews.php', true); // Fetch reviews data
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    contentDiv.innerHTML = xhr.responseText;
+                } else {
+                    contentDiv.innerHTML = "<p>Failed to load reviews data.</p>";
+                }
+            };
+            xhr.send();
         }
 
         function drawWeeklySalesChart(data) {

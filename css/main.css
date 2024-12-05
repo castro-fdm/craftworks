@@ -382,3 +382,52 @@ nav ul li a {
     margin-top: 20px;
     font-size: 14px;
 }
+
+/* Dropdown container */
+.dropdown {
+    position: relative;
+}
+
+/* Dropdown toggle link */
+.dropdown-toggle {
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    list-style: none;
+    z-index: 1000;
+}
+
+/* Show dropdown menu when toggled */
+.dropdown-menu.show {
+    display: block;
+}
+
+/* Dropdown menu links */
+.dropdown-menu li {
+    padding: 10px 20px;
+}
+
+.dropdown-menu li a {
+    color: #000;
+    text-decoration: none;
+    display: block;
+    font-weight: normal;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #f2f2f2;
+}

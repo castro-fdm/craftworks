@@ -42,7 +42,7 @@
     $product_names_str = implode(', ', $product_names); // Convert product names array to string
 
     $sql = "INSERT INTO orders (user_id, total_amount, order_date, order_status, payment_method, billing_address, product_names)
-            VALUES (?, ?, NOW(), 'Pending', ?, ?, ?)";
+            VALUES (?, ?, NOW(), 'Completed', ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("idsss", $user_id, $total_amount, $payment_method, $billing_address, $product_names_str);
 
