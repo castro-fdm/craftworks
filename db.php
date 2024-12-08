@@ -71,7 +71,6 @@
     $sql = "CREATE TABLE IF NOT EXISTS orders (
         id INT AUTO_INCREMENT PRIMARY KEY,                     -- Auto-incremented primary key
         user_id INT NOT NULL,                                  -- Foreign key to users.id
-        product_names TEXT NOT NULL,                           -- Product names (comma-separated list)
         payment_method ENUM('Cash on Delivery', 'E-wallet') NOT NULL DEFAULT 'Cash on Delivery', -- Payment method
         billing_address VARCHAR(255) NOT NULL,                  -- Billing address
         order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,        -- Timestamp for when the order was made
@@ -81,6 +80,19 @@
     )";
     if (!$conn->query($sql)) {
         die("Error creating orders table: " . $conn->error);
+    }
+
+    // Create the Order Items table (normalized relationship between orders and products)
+    $sql = "CREATE TABLE IF NOT EXISTS order_items (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        order_id INT NOT NULL,                                 -- Foreign key to orders.id
+        product_id INT NOT NULL,                               -- Foreign key to inventory.id
+        quantity INT NOT NULL DEFAULT 1,                       -- Quantity of the product in the order
+        FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+        FOREIGN KEY (product_id) REFERENCES inventory(id) ON DELETE CASCADE
+    )";
+    if (!$conn->query($sql)) {
+        die("Error creating order_items table: " . $conn->error);
     }
 
     // Create the Sales table
@@ -102,13 +114,13 @@
         order_id INT NOT NULL,
         user_id INT NOT NULL,
         rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
-        review_text TEXT,
+        review_text TEXT,   -- This is the new column for storing the review content
         review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );";
     if (!$conn->query($sql)) {
-        die("Error creating sales table: " . $conn->error);
+        die("Error creating reviews table: " . $conn->error);
     }
 
     // Insert a sample admin user for testing

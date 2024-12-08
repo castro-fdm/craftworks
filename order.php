@@ -24,18 +24,26 @@
     }
 
     // Fetch orders: To Receive
-    $sql_to_receive = "SELECT id, product_names, total_amount, order_date, order_status 
-            FROM orders 
-            WHERE user_id = ? AND order_status != 'Completed'";
+    $sql_to_receive = "
+        SELECT o.id, o.total_amount, o.order_date, o.order_status,
+               GROUP_CONCAT(oi.product_id, ':', oi.quantity) AS product_details
+        FROM orders o
+        JOIN order_items oi ON o.id = oi.order_id
+        WHERE o.user_id = ? AND o.order_status != 'Completed'
+        GROUP BY o.id";
     $stmt_to_receive = $conn->prepare($sql_to_receive);
     $stmt_to_receive->bind_param("i", $user_id);
     $stmt_to_receive->execute();
     $to_receive_orders = $stmt_to_receive->get_result()->fetch_all(MYSQLI_ASSOC);
 
     // Fetch orders: Completed
-    $sql_completed = "SELECT id, product_names, total_amount, order_date, order_status 
-            FROM orders 
-            WHERE user_id = ? AND order_status = 'Completed'";
+    $sql_completed = "
+        SELECT o.id, o.total_amount, o.order_date, o.order_status,
+               GROUP_CONCAT(oi.product_id, ':', oi.quantity) AS product_details
+        FROM orders o
+        JOIN order_items oi ON o.id = oi.order_id
+        WHERE o.user_id = ? AND o.order_status = 'Completed'
+        GROUP BY o.id";
     $stmt_completed = $conn->prepare($sql_completed);
     $stmt_completed->bind_param("i", $user_id);
     $stmt_completed->execute();
@@ -53,13 +61,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Orders</title>
 </head>
-<body>
-    <?php if (isset($_SESSION['success_message'])): ?>
-        <div class="alert alert-success">
-            <?= htmlspecialchars($_SESSION['success_message']); ?>
-        </div>
-        <?php unset($_SESSION['success_message']); ?>
-    <?php endif; ?>
     <style>
         /* Global Styles */
         body {
@@ -234,6 +235,7 @@
             color: #333;
         }
     </style>
+<body>
     <section id="navbarSection">
         <div class="logoContainer">
             <a id="logo-link" href="index.php"><img id="logo" src="/res/craftworks_logo.png" alt="Logo"></a>
@@ -250,8 +252,7 @@
                 <?php endif; ?>
             </ul>
         </nav>
-                </section>
-
+    </section>
     <div class="order-container">
         <div class="sidebar">
             <h2>Order Categories</h2>
@@ -267,12 +268,21 @@
                 <p>You have no orders to receive.</p>
             <?php else: ?>
                 <?php foreach ($to_receive_orders as $order): ?>
-                    <div class="order">
+                    <div class="order" id="order-<?= $order['id'] ?>">
                         <h3>Order #<?= $order['id'] ?></h3>
-                        <p><strong>Products:</strong> <?= htmlspecialchars($order['product_names']) ?></p>
+                        <p><strong>Products:</strong> 
+                            <?php
+                                $products = explode(',', $order['product_details']);
+                                foreach ($products as $product) {
+                                    list($product_id, $quantity) = explode(':', $product);
+                                    echo "Product ID: $product_id (Qty: $quantity)<br>";
+                                }
+                            ?>
+                        </p>
                         <p><strong>Total Amount:</strong> ₱<?= number_format($order['total_amount'], 2) ?></p>
                         <p><strong>Order Date:</strong> <?= date("F j, Y", strtotime($order['order_date'])) ?></p>
                         <p><strong>Status:</strong> <?= htmlspecialchars($order['order_status']) ?></p>
+                        <button onclick="markAsReceived(<?= $order['id'] ?>)">Order Received</button>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -287,11 +297,20 @@
                 <?php foreach ($completed_orders as $order): ?>
                     <div class="order">
                         <h3>Order #<?= $order['id'] ?></h3>
-                        <p><strong>Products:</strong> <?= htmlspecialchars($order['product_names']) ?></p>
+                        <p><strong>Products:</strong> 
+                            <?php
+                                $products = explode(',', $order['product_details']);
+                                foreach ($products as $product) {
+                                    list($product_id, $quantity) = explode(':', $product);
+                                    echo "Product ID: $product_id (Qty: $quantity)<br>";
+                                }
+                            ?>
+                        </p>
                         <p><strong>Total Amount:</strong> ₱<?= number_format($order['total_amount'], 2) ?></p>
                         <p><strong>Order Date:</strong> <?= date("F j, Y", strtotime($order['order_date'])) ?></p>
                         <p><strong>Status:</strong> <?= htmlspecialchars($order['order_status']) ?></p>
                         
+                        <!-- Review Form -->
                         <form action="product-review.php" method="POST">
                             <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
                             <input type="hidden" name="user_id" value="<?= $user_id ?>">
@@ -315,17 +334,35 @@
 
     <script>
         function showOrders(category) {
-            // Hide all categories
-            document.querySelectorAll('.order-section').forEach(function(section) {
+            document.querySelectorAll('.order-section').forEach(section => {
                 section.style.display = 'none';
             });
-
-            // Show the selected category
             document.getElementById(category).style.display = 'block';
         }
 
-        // Default show "To Receive"
         showOrders('to-receive');
+
+        function markAsReceived(orderId) {
+            if (confirm("Are you sure you want to mark this order as received?")) {
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "update_order_status.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            const orderElement = document.getElementById(`order-${orderId}`);
+                            orderElement.remove();
+                            alert("Order marked as received.");
+                        } else {
+                            alert("Failed to update the order. Please try again.");
+                        }
+                    }
+                };
+
+                xhr.send(`order_id=${orderId}`);
+            }
+        }
     </script>
 </body>
 </html>

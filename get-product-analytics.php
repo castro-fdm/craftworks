@@ -10,6 +10,10 @@
         GROUP BY inventory.product_name";
     $weekly_result = $conn->query($sql_weekly);
 
+    if ($weekly_result->num_rows == 0) {
+        echo "No data found for weekly sales!";
+    }
+
     // Monthly sales query
     $sql_monthly = "
         SELECT inventory.product_name, SUM(sales.quantity) AS total_sales
@@ -19,6 +23,10 @@
         GROUP BY inventory.product_name";
     $monthly_result = $conn->query($sql_monthly);
 
+    if ($monthly_result->num_rows == 0) {
+        echo "No data found for monthly sales!";
+    }
+
     // Future trends query
     $sql_trends = "
         SELECT inventory.product_name, AVG(sales.quantity) AS avg_sales
@@ -27,6 +35,10 @@
         WHERE sales.sale_date >= CURDATE() - INTERVAL 30 DAY
         GROUP BY inventory.product_name";
     $trends_result = $conn->query($sql_trends);
+
+    if ($trends_result->num_rows == 0) {
+        echo "No data found for future trends!";
+    }
 
     // Prepare data for JSON output
     $data = [

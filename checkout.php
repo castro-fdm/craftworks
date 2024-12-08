@@ -16,7 +16,7 @@
     $billing_address = mysqli_real_escape_string($conn, $_POST['billing_address'] ?? ''); // Default to empty if not set
 
     // Calculate total amount
-    $sql = "SELECT c.product_id, c.quantity, i.price, i.product_name
+    $sql = "SELECT c.product_id, c.quantity, i.price, i.product_name, i.quantity AS stock_quantity
             FROM cart c
             JOIN inventory i ON c.product_id = i.id
             WHERE c.user_id = ?";
@@ -27,24 +27,20 @@
 
     $total_amount = 0;
     $cart_items = [];
-    $product_names = [];
 
     while ($row = $result->fetch_assoc()) {
-        if ($row['quantity'] > $row['price']) {
-            die("Insufficient inventory for product ID " . $row['product_id']);
+        if ($row['quantity'] > $row['stock_quantity']) {
+            die("Insufficient inventory for product: " . $row['product_name']);
         }
         $total_amount += $row['price'] * $row['quantity'];
-        $cart_items[] = $row; // Store for inventory deduction
-        $product_names[] = $row['product_name']; // Collect product names
+        $cart_items[] = $row; // Store for order processing
     }
 
-    // Log order with payment method, billing address, and product names
-    $product_names_str = implode(', ', $product_names); // Convert product names array to string
-
-    $sql = "INSERT INTO orders (user_id, total_amount, order_date, order_status, payment_method, billing_address, product_names)
-            VALUES (?, ?, NOW(), 'Completed', ?, ?, ?)";
+    // Create a new order
+    $sql = "INSERT INTO orders (user_id, total_amount, order_date, order_status, payment_method, billing_address)
+            VALUES (?, ?, NOW(), 'Pending', ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("idsss", $user_id, $total_amount, $payment_method, $billing_address, $product_names_str);
+    $stmt->bind_param("idss", $user_id, $total_amount, $payment_method, $billing_address);
 
     if ($stmt->execute()) {
         $order_id = $stmt->insert_id;
@@ -59,6 +55,15 @@
             $stmt->execute();
         }
 
+        // Add products to the order_items table
+        foreach ($cart_items as $item) {
+            $sql = "INSERT INTO order_items (order_id, product_id, quantity)
+                    VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iii", $order_id, $item['product_id'], $item['quantity']);
+            $stmt->execute();
+        }
+
         // Deduct inventory
         foreach ($cart_items as $item) {
             $sql = "UPDATE inventory SET quantity = quantity - ? WHERE id = ?";
@@ -67,12 +72,13 @@
             $stmt->execute();
         }
 
-        // Clear cart
+        // Clear the user's cart
         $sql = "DELETE FROM cart WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
 
+        // Redirect to the shop page
         header("Location: shop.php");
     } else {
         echo "Failed to process checkout!";

@@ -12,9 +12,10 @@
             users.username AS reviewer_name 
         FROM reviews
         JOIN orders ON reviews.order_id = orders.id
-        JOIN inventory ON orders.id = reviews.order_id  -- Assuming order_id links to inventory
+        JOIN order_items ON orders.id = order_items.order_id -- Join with the order_items table
+        JOIN inventory ON order_items.product_id = inventory.id -- Get product details from inventory
         JOIN users ON reviews.user_id = users.id
-        ORDER BY reviews.id DESC
+        ORDER BY reviews.id ASC
     ";
     
     $result = $conn->query($query);

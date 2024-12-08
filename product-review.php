@@ -36,8 +36,7 @@
         $stmt->bind_param("iisi", $order_id, $user_id, $review, $rating);
 
         if ($stmt->execute()) {
-            // Redirect back to the orders page with a success message
-            $_SESSION['success_message'] = "Review submitted successfully!";
+
             header("Location: order.php");
         } else {
             // Provide detailed error message

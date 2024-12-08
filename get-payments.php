@@ -9,7 +9,7 @@
     $sql = "SELECT id, total_amount, payment_date, payment_status 
             FROM payments 
             WHERE user_id = ? 
-            ORDER BY payment_date DESC";
+            ORDER BY payment_date ASC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
